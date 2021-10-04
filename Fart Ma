@@ -2,7 +2,6 @@
 
 #include "Arduino.h"
 #include "DFRobotDFPlayerMini.h"
-#include "DFPlayerMini_Fast.h"
 
 //SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
