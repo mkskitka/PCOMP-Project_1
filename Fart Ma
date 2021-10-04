@@ -1,68 +1,60 @@
 //This is unfinished
 
 #include "Arduino.h"
-#include "SoftwareSerial.h"
 #include "DFRobotDFPlayerMini.h"
 #include "DFPlayerMini_Fast.h"
 
-SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
+//SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 void printDetail(uint8_t type, int value);
 int sensorReading;
-long randomInt = random(1,10);
+long randomInt = random(1, 10);
 bool end = false;
 
 void setup()
 {
-  mySoftwareSerial.begin(9600);
-  Serial.begin(115200);
+  Serial.begin(9600);
+  //Serial.begin(115200);
 
-  Serial.println();
-  Serial.println(F("DFRobot DFPlayer Mini Demo"));
-  Serial.println(F("Initializing DFPlayer ... (May take 3~5 seconds)"));
-
-  if (!myDFPlayer.begin(mySoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
-    Serial.println(F("Unable to begin:"));
-    Serial.println(F("1.Please recheck the connection!"));
-    Serial.println(F("2.Please insert the SD card!"));
-    while(true);
-  }
-  Serial.println(F("DFPlayer Mini online."));
   myDFPlayer.volume(30);  //Set volume value. From 0 to 30
 
 }
 
-void loop(){
+void loop() {
 
-int sensorReading1 = analogRead(A0);
-int sensorReading2 = analogRead(A1);
+  int sensorReading1 = analogRead(A0);
+  int sensorReading2 = analogRead(A1);
 
-//when people sit down, give a hint sound
-  if (sensorReading1>600 ||sensorReading2>600 ){
-    myDFPlayer(1);
+  Serial.println(sensorReading1);
+
+  //when people sit down, give a hint sound
+  if (sensorReading1 > 600 || sensorReading2 > 600 ) {
+    myDFPlayer.play(1);
     delay(5000);
     end = true;
-    
-//when people move their buttom ardoud, play a random fart
-  if (sensorReading1 - sensorReading2 > 400) {
-    myDFPlayer.playFolder(1, randomInt);
-    break; 
-  }else if (sensorReading2 - sensorReading1 > 400) {
-    myDFPlayer.playFolder(1, randomInt);
-    break;
+
+    //when people move their buttom ardoud, play a random fart
+    if (sensorReading1 - sensorReading2 > 400) {
+      myDFPlayer.play(2);
+
+    } else if (sensorReading2 - sensorReading1 > 400) {
+      myDFPlayer.play(3);
+
+    } else {
+     
+    }
   }
-    }   
-   
-   if ((sensorReading1 + sensorReading2)<20 && end = true){
-    myDFPlayer(10); //play the end sound
-   }
+
+  if ((sensorReading1 + sensorReading2) < 20 && end == true) {
+    myDFPlayer.play(4); //play the end sound
+  }
 
   if (myDFPlayer.available()) {
     printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
   }
 }
 
-void printDetail(uint8_t type, int value){
+void printDetail(uint8_t type, int value) {
   switch (type) {
     case TimeOut:
       Serial.println(F("Time Out!"));
