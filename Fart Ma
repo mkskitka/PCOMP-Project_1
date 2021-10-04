@@ -6,17 +6,13 @@
 //SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 void printDetail(uint8_t type, int value);
-int sensorReading;
-long randomInt = random(1, 10);
+int sensorReading1, sensorReasing2;
 bool end = false;
 
 void setup()
 {
   Serial.begin(9600);
-  //Serial.begin(115200);
-
   myDFPlayer.volume(30);  //Set volume value. From 0 to 30
-
 }
 
 void loop() {
@@ -27,83 +23,22 @@ void loop() {
   Serial.println(sensorReading1);
 
   //when people sit down, give a hint sound
-  if (sensorReading1 > 600 || sensorReading2 > 600 ) {
+  if (sensorReading1 > 1000 || sensorReading2 > 1000 ) {
     myDFPlayer.play(1);
     delay(5000);
     end = true;
 
     //when people move their buttom ardoud, play a random fart
-    if (sensorReading1 - sensorReading2 > 400) {
+    if (sensorReading1 - sensorReading2 > 750) {
       myDFPlayer.play(2);
 
-    } else if (sensorReading2 - sensorReading1 > 400) {
+    } else if (sensorReading2 - sensorReading1 > 750) {
       myDFPlayer.play(3);
-
     } else {
-     
     }
   }
 
-  if ((sensorReading1 + sensorReading2) < 20 && end == true) {
+  if (((sensorReading1 + sensorReading2) < 450) && (end == true)) {
     myDFPlayer.play(4); //play the end sound
-  }
-
-  if (myDFPlayer.available()) {
-    printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
-  }
-}
-
-void printDetail(uint8_t type, int value) {
-  switch (type) {
-    case TimeOut:
-      Serial.println(F("Time Out!"));
-      break;
-    case WrongStack:
-      Serial.println(F("Stack Wrong!"));
-      break;
-    case DFPlayerCardInserted:
-      Serial.println(F("Card Inserted!"));
-      break;
-    case DFPlayerCardRemoved:
-      Serial.println(F("Card Removed!"));
-      break;
-    case DFPlayerCardOnline:
-      Serial.println(F("Card Online!"));
-      break;
-    case DFPlayerPlayFinished:
-      Serial.print(F("Number:"));
-      Serial.print(value);
-      Serial.println(F(" Play Finished!"));
-      break;
-    case DFPlayerError:
-      Serial.print(F("DFPlayerError:"));
-      switch (value) {
-        case Busy:
-          Serial.println(F("Card not found"));
-          break;
-        case Sleeping:
-          Serial.println(F("Sleeping"));
-          break;
-        case SerialWrongStack:
-          Serial.println(F("Get Wrong Stack"));
-          break;
-        case CheckSumNotMatch:
-          Serial.println(F("Check Sum Not Match"));
-          break;
-        case FileIndexOut:
-          Serial.println(F("File Index Out of Bound"));
-          break;
-        case FileMismatch:
-          Serial.println(F("Cannot Find File"));
-          break;
-        case Advertise:
-          Serial.println(F("In Advertise"));
-          break;
-        default:
-          break;
-      }
-      break;
-    default:
-      break;
   }
 }
