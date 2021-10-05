@@ -2,8 +2,9 @@
 
 #include "Arduino.h"
 #include "DFRobotDFPlayerMini.h"
+#include "SoftwareSerial.h"
 
-//SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
+SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 void printDetail(uint8_t type, int value);
 int sensorReading1, sensorReasing2;
@@ -41,5 +42,6 @@ void loop() {
 
   if (((sensorReading1 + sensorReading2) < 450) && (end == true)) {
     myDFPlayer.play(4); //play the end sound
+    end = false;
   }
 }
