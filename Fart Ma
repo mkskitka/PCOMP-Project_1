@@ -1,8 +1,6 @@
-//This is unfinished
-
 #include "Arduino.h"
 #include "DFRobotDFPlayerMini.h"
-#include "SoftwareSerial.h"
+#include <SoftwareSerial.h>
 
 SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
