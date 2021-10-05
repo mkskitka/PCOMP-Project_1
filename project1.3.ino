@@ -34,7 +34,7 @@ void loop()
 {
   sensorValue0 = analogRead(analogInPin0);
   
-  if (sensorValue0 < 500){
+  if (sensorValue0 > 800){
     //myDFPlayer.playFolder(1,1); //play specific mp3 in SD:/1/001.mp3; Folder Name(1~99); File Name(1~255)
     myDFPlayer.playMp3Folder(4); //play specific mp3 in SD:/MP3/0004.mp3; File Name(0~65535)
     //delay(5000);
